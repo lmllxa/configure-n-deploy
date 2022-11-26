@@ -21,3 +21,7 @@ jobs:
           command: |
             # Your command
             ansible-playbook -i inventory.txt main.yml
+workflows:
+  myWorkflow:
+    jobs:
+      - configure_infrastructure
