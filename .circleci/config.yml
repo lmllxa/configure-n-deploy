@@ -1,0 +1,30 @@
+# Use the latest 2.1 version of CircleCI pipeline process engine. See: https://circleci.com/docs/2.0/configuration-reference
+version: 2.1
+# Use a package of configuration called an orb.
+orbs:
+  # Choose either one of the orbs below
+  # Declare a dependency on the welcome-orb
+  # welcome: circleci/welcome-orb@0.4.1
+  aws-cli: circleci/aws-cli@2.0.3
+# Orchestrate or schedule a set of jobs
+
+jobs:
+  # Exercise: Config and Deployment
+  configure_infrastructure: 
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      - add_ssh_keys:
+              # You can get this ID in the section where you registered the SSH Key
+              fingerprints: ["XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX"] 
+      - run:
+          name: Install Ansible
+          command: |
+            # Install Ansible
+            apk add --update ansible
+      - run:
+          name: Run Playbook and Configure server
+          command: |
+            # Your command
+            ansible-playbook -i inventory.txt main.yml
