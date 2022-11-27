@@ -10,7 +10,7 @@ jobs:
       - checkout
       - add_ssh_keys:
               # You can get this ID in the section where you registered the SSH Key
-              fingerprints: [a4:7e:50:a4:99:01:74:8b:b9:8a:25:35:a2:b1:23:ef] 
+              fingerprints: [79:26:76:1a:35:4e:8d:be:26:e5:44:73:4d:44:86:40] 
       - run:
           name: Install Ansible
           command: |
@@ -25,8 +25,7 @@ jobs:
           name: Run Playbook and Configure server
           command: |
             # Your command
-            ansible-playbook -i inventory main.yml 
-            #--private-key "~/.ssh/udacity.pem"
+            ansible-playbook -i inventory main.yml #--private-key "udacity.pem"
 workflows:
   myWorkflow:
     jobs:
