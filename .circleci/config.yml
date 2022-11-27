@@ -20,7 +20,7 @@ jobs:
           name: Run Playbook and Configure server
           command: |
             # Your command
-            ansible-playbook -i inventory main.yml --private-key udacity.pem
+            ansible-playbook -i inventory main.yml --private-key "~/.ssh/udacity.pem"
 workflows:
   myWorkflow:
     jobs:
