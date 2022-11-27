@@ -17,6 +17,11 @@ jobs:
             # Install Ansible
             apk add --update ansible
       - run:
+          name: List files
+          command: |
+            ls -al
+            echo '^^^The files in my repo^^^'
+      - run:
           name: Run Playbook and Configure server
           command: |
             # Your command
