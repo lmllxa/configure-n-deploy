@@ -3,7 +3,7 @@
 - name: Exercise for setting up a web server in an EC 
   # hosts: ubuntu
   # Use the public IP if the VM is already created
-  hosts: 3.87.191.55
+  hosts: 44.203.70.250
   user: ubuntu
   become: true
   become_method: sudo
