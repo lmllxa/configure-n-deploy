@@ -26,7 +26,24 @@ jobs:
           command: |
             # Your command --private-key udacity.pem
             ansible-playbook main.yml -i inventory 
+  smoke_test:
+    docker:
+      - image: alpine:latest
+    steps:
+      - run: apk add --update curl
+      - run:
+          name: smoke test
+          command: |
+            URL="http://44.203.70.250:3000"
+            # Test if website works
+            if curl -s --head ${URL} 
+            then
+              return 0
+            else
+              return 1
+            fi
 workflows:
   myWorkflow:
     jobs:
       - configure_infrastructure
+      - smoke_test
