@@ -16,6 +16,13 @@ jobs:
     docker:
       - image: amazon/aws-cli
     steps:
+    steps:
+      - run: echo "URL" > ~/output.txt
+      - run: readlink -f ~/output.txt 
+      - persist_to_workspace:
+          root: ~/
+          paths: 
+            - output.txt 
       - checkout
       - run:
           name: Get frontend url
@@ -30,9 +37,6 @@ jobs:
             echo API_URL >> ~/output.txt
             chmod u+x simple.sh
             ./simple.sh
-  download_file:
-    docker:
-      - image: circleci/node:13.8.0
     steps:
       - attach_workspace:
           at: ~/
@@ -80,8 +84,6 @@ jobs:
 workflows:
   myWorkflow:
     jobs:
-      - upload_file
       - get_url
-      - download_file
       - configure_infrastructure
       - smoke_test
