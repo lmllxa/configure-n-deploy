@@ -8,12 +8,12 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Get backend url
+          name: Get frontend url
           command: |
             export FRONTEND_IP=$(aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --filters "Name=tag:Name,Values=node-web-server" \
-              --output text >> inventory.txt)
+              --output text >> inventory)
             export API_URL="http://${FRONTEND_IP}:3000"
   # Exercise: Config and Deployment
   configure_infrastructure: 
