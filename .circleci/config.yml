@@ -14,8 +14,8 @@ jobs:
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --filters "Name=tag:Name,Values=node-web-server" \
               --output text)
-            echo FRONTEND_IP
-            FRONTEND_IP >> inventory
+            echo $FRONTEND_IP
+            $FRONTEND_IP >> inventory
             export API_URL="http://${FRONTEND_IP}:3000"
   # Exercise: Config and Deployment
   configure_infrastructure: 
