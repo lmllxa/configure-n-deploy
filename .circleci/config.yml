@@ -22,6 +22,15 @@ jobs:
             ls -al
             echo '^^^The files in my repo^^^'
       - run:
+          name: Get backend url
+          command: |
+            # your code here
+            export FRONTEND_IP=$(aws ec2 describe-instances \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --filters "Name=tag:Name,Values=node-web-server" \
+              --output text >> inventory.txt)
+            export API_URL="http://${FRONTEND_IP}:3000"
+      - run:
           name: Run Playbook and Configure server
           command: |
             # Your command --private-key udacity.pem
@@ -34,7 +43,7 @@ jobs:
       - run:
           name: smoke test
           command: |
-            URL="http://44.203.70.250:3000"
+            URL="http://${FRONTEND_IP}:3000"
             # Test if website works
             if curl -s --head ${URL} 
             then
