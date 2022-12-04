@@ -2,20 +2,9 @@
 version: 2.1
 
 jobs:
-  upload_file:
-    docker:
-      - image: circleci/node:13.8.0
-    steps:
-      - run: echo "URL" > ~/output.txt
-      - run: readlink -f ~/output.txt 
-      - persist_to_workspace:
-          root: ~/
-          paths: 
-            - output.txt 
   get_url:
     docker:
       - image: amazon/aws-cli
-    steps:
     steps:
       - run: echo "URL" > ~/output.txt
       - run: readlink -f ~/output.txt 
@@ -37,7 +26,6 @@ jobs:
             echo API_URL >> ~/output.txt
             chmod u+x simple.sh
             ./simple.sh
-    steps:
       - attach_workspace:
           at: ~/
       - run: cat ~/output.txt 
