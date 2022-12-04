@@ -5,10 +5,23 @@ jobs:
   # Exercise: Config and Deployment
   configure_infrastructure: 
     docker:
+      # Docker image here that supports AWS CLI
+      - image: amazon/aws-cli
+    steps:
+      # Checkout code from git
+      - checkout
+      - run:
+          name: Get backend url
+          command: |
+            export FRONTEND_IP=$(aws ec2 describe-instances \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --filters "Name=tag:Name,Values=node-web-server" \
+              --output text >> inventory.txt)
+            export API_URL="http://${FRONTEND_IP}:3000"
+    docker:
       - image: python:3.7-alpine3.11
     steps:
       - checkout
-      - install_awscli
       - add_ssh_keys:
               # You can get this ID in the section where you registered the SSH Key
               fingerprints: ["ac:c1:43:62:7d:a0:1b:84:eb:0e:f8:4d:c3:2e:61:fb"] 
@@ -22,15 +35,6 @@ jobs:
           command: |
             ls -al
             echo '^^^The files in my repo^^^'
-      - run:
-          name: Get backend url
-          command: |
-            # your code here
-            export FRONTEND_IP=$(aws ec2 describe-instances \
-              --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --filters "Name=tag:Name,Values=node-web-server" \
-              --output text >> inventory.txt)
-            export API_URL="http://${FRONTEND_IP}:3000"
       - run:
           name: Run Playbook and Configure server
           command: |
