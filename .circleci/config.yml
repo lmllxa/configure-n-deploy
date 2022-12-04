@@ -1,11 +1,20 @@
 # Use the latest 2.1 version of CircleCI pipeline process engine. See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
-
+orbs:
+  # Choose either one of the orbs below
+  # Declare a dependency on the welcome-orb
+  # welcome: circleci/welcome-orb@0.4.1
+  aws-cli: circleci/aws-cli@2.0.3
 jobs:
   get_url:
     docker:
       - image: amazon/aws-cli
+      #- image: circleci/node:13.8.0
     steps:
+      - run:
+          name: Install tar utility
+          command: |
+            yum install -y tar gzip
       - run: echo "URL" > ~/output.txt
       - run: readlink -f ~/output.txt 
       - persist_to_workspace:
