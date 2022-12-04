@@ -6,7 +6,8 @@ jobs:
     docker:
       - image: circleci/node:13.8.0
     steps:
-      - run: echo "URL" > ~/output.txt  
+      - run: echo "URL" > ~/output.txt
+      - run: readlink -f ~/output.txt 
       - persist_to_workspace:
           root: ~/
           paths: 
