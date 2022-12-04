@@ -2,20 +2,21 @@
 version: 2.1
 
 jobs:
+  get_url:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: Get backend url
+          command: |
+            export FRONTEND_IP=$(aws ec2 describe-instances \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --filters "Name=tag:Name,Values=node-web-server" \
+              --output text >> inventory.txt)
+            export API_URL="http://${FRONTEND_IP}:3000"
   # Exercise: Config and Deployment
   configure_infrastructure: 
-    # docker:
-    #   - image: amazon/aws-cli
-    # steps:
-    #   - checkout
-    #   - run:
-    #       name: Get backend url
-    #       command: |
-    #         export FRONTEND_IP=$(aws ec2 describe-instances \
-    #           --query 'Reservations[*].Instances[*].PublicIpAddress' \
-    #           --filters "Name=tag:Name,Values=node-web-server" \
-    #           --output text >> inventory.txt)
-    #         export API_URL="http://${FRONTEND_IP}:3000"
     docker:
       - image: python:3.7-alpine3.11
     steps:
@@ -58,4 +59,4 @@ workflows:
   myWorkflow:
     jobs:
       - configure_infrastructure
-      # - smoke_test
+      - smoke_test
