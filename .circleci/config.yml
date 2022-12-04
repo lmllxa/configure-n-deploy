@@ -58,5 +58,6 @@ jobs:
 workflows:
   myWorkflow:
     jobs:
+      - get_url
       - configure_infrastructure
       - smoke_test
