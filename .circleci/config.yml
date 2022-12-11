@@ -49,6 +49,8 @@ jobs:
             yum install -y tar gzip
       - attach_workspace:
           at: ~/
+      - run: ls -al
+      - run: echo $FRONTEND_IP
       - run: cat ~/output.txt
       - run: export MY_IP=`cat ~/output.txt`       
   # Exercise: Config and Deployment
@@ -107,9 +109,9 @@ workflows:
   myWorkflow:
     jobs:
       - get_url
-      # - print_url:
-      #     requires:
-      #       - get_url
+      - print_url:
+          requires:
+            - get_url
       # - configure_infrastructure
       # - smoke_test:
       #     requires:
