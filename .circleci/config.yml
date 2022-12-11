@@ -22,7 +22,7 @@ jobs:
           root: ~/
           paths: 
             - output.txt 
-      - checkout
+      #- checkout
       - run:
           name: Get frontend url
           command: |
