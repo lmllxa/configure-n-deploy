@@ -86,7 +86,7 @@ jobs:
       - attach_workspace:
           at: ~/
       - run: cat ~/output.txt
-      - run: apk add --update curl
+      #- run: apk add --update curl
       - run:
           name: smoke test
           command: |
