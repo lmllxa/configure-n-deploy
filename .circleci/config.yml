@@ -35,9 +35,17 @@ jobs:
             echo $API_URL >> ~/output.txt
             chmod u+x simple.sh
             ./simple.sh
+      # - attach_workspace:
+      #     at: ~/
+      # - run: cat ~/output.txt 
+  print_url:
+    docker:
+      - image: amazon/aws-cli
+    steps:
       - attach_workspace:
           at: ~/
-      - run: cat ~/output.txt 
+      - run: cat output.txt
+      - run: EXPORT MY_IP=`cat output.txt`       
   # Exercise: Config and Deployment
   configure_infrastructure: 
     docker:
@@ -64,13 +72,17 @@ jobs:
             ansible-playbook main.yml -i inventory 
   smoke_test:
     docker:
-      - image: alpine:latest
+      #- image: alpine:latest
+      - image: amazon/aws-cli
     steps:
+      - attach_workspace:
+          at: ~/
+      - run: cat output.txt
       - run: apk add --update curl
       - run:
           name: smoke test
           command: |
-            URL="http://${FRONTEND_IP}:3000"
+            URL="http://${MY_IP}:3000"
             # Test if website works
             if curl -s --head ${URL} 
             then
@@ -82,7 +94,10 @@ workflows:
   myWorkflow:
     jobs:
       - get_url
+      - print_url:
+          requires:
+            - get_url
       - configure_infrastructure
-      # - smoke_test:
-      #     requires:
-      #       - configure_infrastructure
+      - smoke_test:
+          requires:
+            - configure_infrastructure
