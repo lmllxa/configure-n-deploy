@@ -92,12 +92,16 @@ jobs:
           command: |
             URL="http://${MY_IP}:3000"
             # Test if website works
-            if curl -s --head ${URL} 
-            then
-              return 0
-            else
-              return 1
-            fi
+            fn() {
+              if curl -s --head ${URL} 
+              then
+                return 0
+              else
+                return 1
+              fi              
+            }
+            fn
+
 workflows:
   myWorkflow:
     jobs:
