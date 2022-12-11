@@ -48,8 +48,8 @@ jobs:
             yum install -y tar gzip
       - attach_workspace:
           at: ~/
-      - run: cat output.txt
-      - run: EXPORT MY_IP=`cat output.txt`       
+      - run: cat ~/output.txt
+      - run: EXPORT MY_IP=`cat ~/output.txt`       
   # Exercise: Config and Deployment
   configure_infrastructure: 
     docker:
@@ -104,4 +104,4 @@ workflows:
       - configure_infrastructure
       - smoke_test:
           requires:
-            - configure_infrastructure
+            - print_url
