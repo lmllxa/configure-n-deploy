@@ -7,6 +7,7 @@ orbs:
   aws-cli: circleci/aws-cli@2.0.3
 jobs:
   get_url:
+    working_directory: ~/
     docker:
       - image: amazon/aws-cli
       #- image: circleci/node:13.8.0
@@ -40,6 +41,7 @@ jobs:
       #     at: ~/
       # - run: cat ~/output.txt 
   print_url:
+    working_directory: ~/
     docker:
       - image: amazon/aws-cli
     steps:
