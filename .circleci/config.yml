@@ -35,8 +35,8 @@ jobs:
             export API_URL="http://${FRONTEND_IP}:3000"
             echo $API_URL >> ~/output.txt
             cat ~/output.txt
-            chmod u+x ~/simple.sh
-            .~/simple.sh
+            # chmod u+x ~/simple.sh
+            # .~/simple.sh
       # - attach_workspace:
       #     at: ~/
       # - run: cat ~/output.txt 
