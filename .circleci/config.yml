@@ -37,7 +37,7 @@ jobs:
             echo "$FRONTEND_IP"
             export API_URL="http://${FRONTEND_IP}:3000"
             echo $API_URL >> ~/output.txt
-            echo $API_URL >> /tmp/output.txt
+            echo $API_URL >> /tmp/workspace/output.txt
             echo "printing ~/output.txt"
             cat ~/output.txt
             echo "printing /tmp/workspace/output.txt"
@@ -56,10 +56,11 @@ jobs:
             yum install -y tar gzip
       - attach_workspace:
           at: /tmp/workspace
+      - run: cd workspace
       - run: ls -al
       - run: echo $FRONTEND_IP
       - run: cat /tmp/workspace/output.txt
-      - run: export MY_IP=`cat ~/tmp/workspace/output.txt`    
+      - run: export MY_IP=`cat /tmp/workspace/output.txt`    
       - run: echo $MY_IP   
   # Exercise: Config and Deployment
   configure_infrastructure: 
