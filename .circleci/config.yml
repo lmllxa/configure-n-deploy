@@ -56,12 +56,14 @@ jobs:
             yum install -y tar gzip
       - attach_workspace:
           at: /tmp/workspace
-      - run: cd workspace
-      - run: ls -al
-      - run: echo $FRONTEND_IP
-      - run: cat /tmp/workspace/output.txt
-      - run: export MY_IP=`cat /tmp/workspace/output.txt`    
-      - run: echo $MY_IP   
+      - run:
+          name: Print URL
+          command: |
+            #ls -al
+            #echo $FRONTEND_IP
+            cat /tmp/workspace/output.txt
+            export MY_IP=`cat /tmp/workspace/output.txt`    
+            echo $MY_IP   
   # Exercise: Config and Deployment
   configure_infrastructure: 
     docker:
