@@ -23,7 +23,7 @@ jobs:
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --filters "Name=tag:Name,Values=node-web-server" --region=us-east-1\
               --output text)
-            export API_URL="http://${FRONTEND_IP}:3000"
+            export API_URL="http://$FRONTEND_IP:3000"
             echo $API_URL > workspace/echo-output
             #URL="1.2.3.4"
             #echo $API_URL > workspace/echo-output
