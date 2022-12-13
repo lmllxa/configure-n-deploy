@@ -27,7 +27,7 @@ jobs:
             echo $API_URL > workspace/echo-output
             #URL="1.2.3.4"
             #echo $API_URL > workspace/echo-output
-            cat workspace/echo-outpu
+            cat workspace/echo-output
             # chmod u+x ~/simple.sh
             # .~/simple.sh
       - persist_to_workspace:
