@@ -21,15 +21,11 @@ jobs:
             mkdir -p workspace
             export FRONTEND_IP=$(aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --filters "Name=tag:Name,Values=node-web-server" --region=us-east-1\
+              --filters "Name=tag:Name,Values=node-web-server" \
               --output text)
-            export API_URL="http://$FRONTEND_IP:3000"
+            export API_URL="http://${FRONTEND_IP}:3000"
             echo $API_URL > workspace/echo-output
-            #URL="1.2.3.4"
-            #echo $API_URL > workspace/echo-output
             cat workspace/echo-output
-            # chmod u+x ~/simple.sh
-            # .~/simple.sh
       - persist_to_workspace:
           # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
           # taken to be the root directory of the workspace.
@@ -104,10 +100,10 @@ workflows:
   myWorkflow:
     jobs:
       - get_url
-      - print_url:
-          requires:
-            - get_url
-      - configure_infrastructure
-      - smoke_test:
-          requires:
-            - print_url
+      # - print_url:
+      #     requires:
+      #       - get_url
+      # - configure_infrastructure
+      # - smoke_test:
+      #     requires:
+      #       - print_url
