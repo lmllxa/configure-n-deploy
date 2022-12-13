@@ -84,13 +84,13 @@ jobs:
       - run:
           name: smoke test
           command: |
-            cat /tmp/workspace/echo-output
-            export MY_WEB_IP=`cat /tmp/workspace/echo-output`    
-            echo $MY_WEB_IP 
-            URL="http://${MY_WEB_IP}:3000"
+            # cat /tmp/workspace/echo-output
+            # export MY_WEB_IP=`cat /tmp/workspace/echo-output`    
+            # echo $MY_WEB_IP 
+            # URL="http://${MY_WEB_IP}:3000"
             # Test if website works
             fn() {
-              if curl -s --head ${URL} 
+              if curl -s --head ${MY_IP} 
               then
                 return 0
               else
