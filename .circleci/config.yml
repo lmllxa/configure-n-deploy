@@ -6,47 +6,37 @@ executors:
       - image: amazon/aws-cli
     working_directory: /tmp
 orbs:
-  # Choose either one of the orbs below
-  # Declare a dependency on the welcome-orb
-  # welcome: circleci/welcome-orb@0.4.1
   aws-cli: circleci/aws-cli@2.0.3
 jobs:
   get_url:
     executor: my-executor
-      #- image: circleci/node:13.8.0
     steps:
       - run:
           name: Install tar utility
           command: |
             yum install -y tar gzip
-      - run: mkdir -p workspace
-      - run: echo "" > workspace/output.txt
-      - run: readlink -f workspace/output.txt 
-      - persist_to_workspace:
-          root: workspace
-          paths: 
-            - output.txt 
-      #- checkout
       - run:
           name: Get frontend url
           command: |
+            mkdir -p workspace
             export FRONTEND_IP=$(aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --filters "Name=tag:Name,Values=node-web-server" \
               --output text)
-            echo "$FRONTEND_IP"
             export API_URL="http://${FRONTEND_IP}:3000"
-            echo $API_URL >> ~/output.txt
-            echo $API_URL >> /tmp/workspace/output.txt
-            echo "printing ~/output.txt"
-            cat ~/output.txt
-            echo "printing /tmp/workspace/output.txt"
-            cat /tmp/workspace/output.txt
+            echo $API_URL > workspace/echo-output
+            #URL="1.2.3.4"
+            #echo $API_URL > workspace/echo-output
+            cat workspace/echo-outpu
             # chmod u+x ~/simple.sh
             # .~/simple.sh
-      # - attach_workspace:
-      #     at: ~/
-      # - run: cat ~/output.txt 
+      - persist_to_workspace:
+          # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
+          # taken to be the root directory of the workspace.
+          root: workspace
+          # Must be relative path from root
+          paths:
+            - echo-output
   print_url:
     executor: my-executor
     steps:
@@ -59,10 +49,8 @@ jobs:
       - run:
           name: Print URL
           command: |
-            #ls -al
-            #echo $FRONTEND_IP
-            cat /tmp/workspace/output.txt
-            export MY_IP=`cat /tmp/workspace/output.txt`    
+            cat /tmp/workspace/echo-output
+            export MY_IP=`cat /tmp/workspace/echo-output`    
             echo $MY_IP   
   # Exercise: Config and Deployment
   configure_infrastructure: 
@@ -89,18 +77,14 @@ jobs:
             # Your command --private-key udacity.pem
             ansible-playbook main.yml -i inventory 
   smoke_test:
-    docker:
-      #- image: alpine:latest
-      - image: amazon/aws-cli
+    executor: my-executor
     steps:
       - run:
           name: Install tar utility
           command: |
             yum install -y tar gzip
       - attach_workspace:
-          at: ~/
-      - run: cat ~/output.txt
-      #- run: apk add --update curl
+          at: /tmp/workspace
       - run:
           name: smoke test
           command: |
@@ -123,7 +107,7 @@ workflows:
       - print_url:
           requires:
             - get_url
-      # - configure_infrastructure
-      # - smoke_test:
-      #     requires:
-      #       - print_url
+      - configure_infrastructure
+      - smoke_test:
+          requires:
+            - print_url
