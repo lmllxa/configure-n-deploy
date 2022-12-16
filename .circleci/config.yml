@@ -14,6 +14,7 @@ jobs:
           name: Install tar utility
           command: |
             yum install -y tar gzip
+            yum install git -y
       - checkout
       - run:
           name: List files
@@ -50,7 +51,7 @@ jobs:
       - run:
           name: Print URL
           command: |
-            cat /tmp/workspace/echo-output
+            cat ~/echo-output
             export MY_IP=`cat ~/echo-output`    
             echo $MY_IP   
   # Exercise: Config and Deployment
