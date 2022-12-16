@@ -42,6 +42,12 @@ jobs:
             yum install -y tar gzip
       - attach_workspace:
           at: /tmp/workspace
+      - checkout
+      - run:
+          name: List files
+          command: |
+            ls -al
+            echo '^^^The files in my repo^^^'
       - run:
           name: Print URL
           command: |
