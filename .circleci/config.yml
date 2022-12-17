@@ -25,7 +25,8 @@ jobs:
             export API_URL="http://${FRONTEND_IP}:3000"
             echo $API_URL > ~/echo-output
             cat ~/echo-output
-            echo $FRONTEND_IP >> ~/project/inventory
+            ls -al
+            #echo $FRONTEND_IP >> ~/project/inventory
       - persist_to_workspace:
           # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
           # taken to be the root directory of the workspace.
@@ -60,9 +61,10 @@ jobs:
               # fingerprints: ["74:6b:a1:9f:84:19:56:fd:e9:4b:38:e1:8a:5f:b3:55"] 
               fingerprints: ["0a:cf:9f:c3:5c:98:07:e8:b3:bd:ea:fa:a5:44:22:3e"]
       - run:
-          name: Install Ansible
+          name: Install aws cli and Ansible
           command: |
             # Install aws cli
+            apk add  --no-cache aws-cli tar gzip
             # apk --no-cache add curl
             # curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             # unzip awscliv2.zip
@@ -70,14 +72,14 @@ jobs:
             # aws --version
             # Install Ansible
             apk add --update ansible
-      # - run:
-      #     name: Get frontend url
-      #     command: |
-      #       export FRONTEND_IP=$(/usr/local/bin/aws ec2 describe-instances \
-      #         --query 'Reservations[*].Instances[*].PublicIpAddress' \
-      #         --filters "Name=tag:Name,Values=node-web-server" \
-      #         --output text >> inventory)
-      #       cat inventory
+      - run:
+          name: Get frontend url
+          command: |
+            export FRONTEND_IP=$(aws ec2 describe-instances \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --filters "Name=tag:Name,Values=node-web-server" \
+              --output text >> inventory)
+            cat inventory
       - run:
           name: List files
           command: |
