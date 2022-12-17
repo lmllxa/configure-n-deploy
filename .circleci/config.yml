@@ -81,7 +81,8 @@ jobs:
             cat inventory
             export API_URL="http://${FRONTEND_IP}:3000"
             mkdir -p url-file
-            echo $API_URL url-file/echo-output
+            echo $API_URL >> url-file/echo-output
+            echo url-file/echo-output
       - persist_to_workspace:
           root: ~/
         # Must be relative path from root
