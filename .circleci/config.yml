@@ -134,7 +134,9 @@ jobs:
       - run:
           name: 2nd smoke test
           command: |
+            apk --no-cache add curl
             cat inventory
+            echo $API_URL
             # Test if website works
             fn() {
               if curl -s --head ${API_URL} 
