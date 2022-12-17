@@ -82,10 +82,10 @@ jobs:
             echo $API_URL > ~/echo-output
             cat ~/echo-output
       - persist_to_workspace:
-      root: ~/
-      # Must be relative path from root
-      paths:
-        - inventory
+          root: ~/
+        # Must be relative path from root
+          paths:
+            - inventory
       - run:
           name: List files
           command: |
