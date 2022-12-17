@@ -62,7 +62,6 @@ jobs:
           name: Install Ansible
           command: |
             # Install aws cli
-            yum update -y
             wget https://s3.amazonaws.com/aws-cli/awscli-bundle.zip -O awscli1.zip
             unzip awscli1.zip
             sudo ./awscli1/install -i /usr/local/aws -b /usr/local/bin/aws
