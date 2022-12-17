@@ -66,13 +66,13 @@ jobs:
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             unzip awscliv2.zip
             ./aws/install
-            aws --version
+            /usr/local/bin/aws --version
             # Install Ansible
             apk add --update ansible
       - run:
           name: Get frontend url
           command: |
-            export FRONTEND_IP=$(aws ec2 describe-instances \
+            export FRONTEND_IP=$(/usr/local/bin/aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --filters "Name=tag:Name,Values=node-web-server" \
               --output text >> inventory)
