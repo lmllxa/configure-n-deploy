@@ -79,8 +79,6 @@ jobs:
               --output text >> inventory)
             cat inventory
             export API_URL="http://${FRONTEND_IP}:3000"
-            echo $API_URL > ~/echo-output
-            cat ~/echo-output
       - persist_to_workspace:
           root: ~/
         # Must be relative path from root
