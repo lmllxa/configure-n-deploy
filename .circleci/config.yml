@@ -66,11 +66,8 @@ jobs:
             # Install aws cli
             pip install awscli
             apk add  --no-cache aws-cli
-            # apk --no-cache add curl
-            # curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-            # unzip awscliv2.zip
-            # ./aws/install
-            # aws --version
+            apk --no-cache add curl
+            aws --version
             # Install Ansible
             apk add --update ansible
       - run:
