@@ -64,9 +64,9 @@ jobs:
             # Install aws cli
             wget https://s3.amazonaws.com/aws-cli/awscli-bundle.zip -O awscli1.zip
             unzip awscli1.zip
-            sudo ./awscli1/install -i /usr/local/aws -b /usr/local/bin/aws
+            ./awscli1/install -i /usr/local/aws -b /usr/local/bin/aws
             cd aws
-            sudo ./install
+            ./install
             aws --version
             cd ..
             # Install Ansible
