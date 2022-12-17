@@ -15,13 +15,6 @@ jobs:
           command: |
             yum update -y
             yum install -y tar gzip
-            yum install git -y
-      - checkout
-      - run:
-          name: List files
-          command: |
-            ls -al
-            echo '^^^The files in my repo^^^'
       - run:
           name: Get frontend url
           command: |
@@ -68,6 +61,15 @@ jobs:
       - run:
           name: Install Ansible
           command: |
+            # Install aws cli
+            yum update -y
+            wget https://s3.amazonaws.com/aws-cli/awscli-bundle.zip -O awscli1.zip
+            unzip awscli1.zip
+            sudo ./awscli1/install -i /usr/local/aws -b /usr/local/bin/aws
+            cd aws
+            sudo ./install
+            aws --version
+            cd ..
             # Install Ansible
             apk add --update ansible
       - run:
