@@ -69,6 +69,14 @@ jobs:
             # Install Ansible
             apk add --update ansible
       - run:
+          name: Get frontend url
+          command: |
+            export FRONTEND_IP=$(aws ec2 describe-instances \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --filters "Name=tag:Name,Values=node-web-server" \
+              --output text >> inventory)
+            cat inventory
+      - run:
           name: List files
           command: |
             ls -al
