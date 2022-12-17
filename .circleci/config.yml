@@ -65,7 +65,7 @@ jobs:
           command: |
             # Install aws cli
             pip install awscli
-            apk add  --no-cache aws-cli
+            apk add  --no-cache aws-cli tar gzip
             apk --no-cache add curl
             aws --version
             # Install Ansible
@@ -78,6 +78,14 @@ jobs:
               --filters "Name=tag:Name,Values=node-web-server" \
               --output text >> inventory)
             cat inventory
+            export API_URL="http://${FRONTEND_IP}:3000"
+            echo $API_URL > ~/echo-output
+            cat ~/echo-output
+      - persist_to_workspace:
+      root: ~/
+      # Must be relative path from root
+      paths:
+        - inventory
       - run:
           name: List files
           command: |
@@ -113,6 +121,30 @@ jobs:
               fi              
             }
             fn
+  smoke_test2:
+    docker:
+      - image: python:3.7-alpine3.16
+    steps:
+      - run:
+          name: Install tar utility
+          command: |
+            apk add  --no-cache tar gzip
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: 2nd smoke test
+          command: |
+            cat inventory
+            # Test if website works
+            fn() {
+              if curl -s --head ${API_URL} 
+              then
+                return 0
+              else
+                return 1
+              fi              
+            }
+            fn
 
 workflows:
   myWorkflow:
@@ -125,3 +157,6 @@ workflows:
       - smoke_test:
           requires:
             - print_url
+      - smoke_test2:
+          requires:
+            - configure_infrastructure
