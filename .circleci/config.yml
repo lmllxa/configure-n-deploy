@@ -80,11 +80,14 @@ jobs:
               --output text >> inventory)
             cat inventory
             export API_URL="http://${FRONTEND_IP}:3000"
+            mkdir -p url-file
+            echo $API_URL url-file/echo-output
       - persist_to_workspace:
           root: ~/
         # Must be relative path from root
           paths:
             - inventory
+            - url-file/echo-output
       - run:
           name: List files
           command: |
@@ -136,7 +139,8 @@ jobs:
           command: |
             apk --no-cache add curl
             cat inventory
-            echo $API_URL
+            API_URL=`cat url-file/echo-output`
+            echo API_URL
             # Test if website works
             fn() {
               if curl -s --head ${API_URL} 
