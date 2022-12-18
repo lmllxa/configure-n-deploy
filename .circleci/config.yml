@@ -90,6 +90,8 @@ jobs:
             touch url-file/echo-output
             echo "API_URL=$API_URL"
             echo $API_URL >> url-file/echo-output
+            echo "print current directory..."
+            pwd
             ls -al
             ls url-file/
             cat url-file/echo-output
@@ -106,6 +108,10 @@ jobs:
       - run:
           name: Run Playbook and Configure server
           command: |
+            echo "print current directory..."
+            pwd
+            echo "print inventory..."
+            cat inventory
             # Your command --private-key udacity.pem
             ansible-playbook main.yml -i inventory 
   smoke_test:
@@ -150,8 +156,9 @@ jobs:
           name: 2nd smoke test
           command: |
             apk --no-cache add curl
+            echo "print current directory..."
+            pwd
             cat inventory
-            cat url-file/echo-output
             API_URL=`cat url-file/echo-output`
             echo $API_URL
             # Test if website works
