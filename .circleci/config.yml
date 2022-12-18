@@ -43,13 +43,12 @@ jobs:
             yum install -y tar gzip
       - attach_workspace:
           at: ~/
-          path: echo-output
       - run:
           name: Print URL
           command: |
             cat ~/echo-output
             export MY_IP=`cat ~/echo-output`    
-            echo $MY_IP   
+            echo "my ip = $MY_IP"   
   # Exercise: Config and Deployment
   configure_infrastructure: 
     docker:
@@ -78,6 +77,8 @@ jobs:
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --filters "Name=tag:Name,Values=node-web-server" \
               --output text >> inventory)
+            cat "front end ip= $FRONTEND_IP"
+            echo "print inventory..."
             cat inventory
             export API_URL="http://${FRONTEND_IP}:3000"
             mkdir -p url-file
