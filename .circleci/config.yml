@@ -91,7 +91,7 @@ jobs:
             echo "API_URL=$API_URL"
             echo $API_URL >> url-file/echo-output
             ls -al
-            ls url-file/echo-output
+            ls url-file/
             cat url-file/echo-output
       - persist_to_workspace:
           root: ~/
