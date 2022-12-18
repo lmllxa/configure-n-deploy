@@ -43,6 +43,7 @@ jobs:
             yum install -y tar gzip
       - attach_workspace:
           at: ~/
+          path: echo-output
       - run:
           name: Print URL
           command: |
@@ -65,7 +66,7 @@ jobs:
           command: |
             # Install aws cli
             pip install awscli
-            apk add  --no-cache aws-cli tar gzip
+            apk add --no-cache aws-cli tar gzip
             apk --no-cache add curl
             aws --version
             # Install Ansible
@@ -81,11 +82,13 @@ jobs:
             export API_URL="http://${FRONTEND_IP}:3000"
             mkdir -p url-file
             touch url-file/echo-output
+            echo "API_URL=$API_URL"
             echo $API_URL >> url-file/echo-output
-            echo url-file/echo-output
+            ls -al
+            ls url-file/echo-output
+            cat url-file/echo-output
       - persist_to_workspace:
           root: ~/
-        # Must be relative path from root
           paths:
             - inventory
             - url-file/echo-output
@@ -107,12 +110,12 @@ jobs:
           command: |
             yum install -y tar gzip
       - attach_workspace:
-          at: /tmp/workspace
+          at: ~/
       - run:
           name: smoke test
           command: |
-            cat /tmp/workspace/echo-output
-            export MY_WEB_URL=`cat /tmp/workspace/echo-output`    
+            cat ~/echo-output
+            export MY_WEB_URL=`cat ~/echo-output`    
             echo $MY_WEB_URL 
             # Test if website works
             fn() {
@@ -132,7 +135,7 @@ jobs:
       - run:
           name: Install tar utility
           command: |
-            apk add  --no-cache tar gzip
+            apk add --no-cache tar gzip
       - attach_workspace:
           at: ~/
       - run:
