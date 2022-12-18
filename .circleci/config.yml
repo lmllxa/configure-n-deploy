@@ -182,6 +182,7 @@ workflows:
       - configure_infrastructure
       - smoke_test:
           requires:
+            - configure_infrastructure
             - print_url
       - smoke_test2:
           requires:
