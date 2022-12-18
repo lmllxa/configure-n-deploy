@@ -77,7 +77,7 @@ jobs:
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --filters "Name=tag:Name,Values=node-web-server" \
               --output text >> inventory)
-            cat "front end ip= $FRONTEND_IP"
+            echo "front end ip= $FRONTEND_IP"
             echo "print inventory..."
             cat inventory
             export API_URL="http://${FRONTEND_IP}:3000"
