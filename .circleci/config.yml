@@ -56,6 +56,7 @@ jobs:
     working_directory: ~/
     steps:
       - checkout
+      - run: pwd
       - add_ssh_keys:
               # You can get this ID in the section where you registered the SSH Key
               # fingerprints: ["74:6b:a1:9f:84:19:56:fd:e9:4b:38:e1:8a:5f:b3:55"] 
@@ -73,14 +74,18 @@ jobs:
       - run:
           name: Get frontend url
           command: |
+            export FRONTEND_IP_TEST=$(aws ec2 describe-instances \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --filters "Name=tag:Name,Values=node-web-server" \
+              --output text)
             export FRONTEND_IP=$(aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --filters "Name=tag:Name,Values=node-web-server" \
               --output text >> inventory)
-            echo "front end ip= $FRONTEND_IP"
+            echo "front end ip= $FRONTEND_IP_TEST"
             echo "print inventory..."
             cat inventory
-            export API_URL="http://${FRONTEND_IP}:3000"
+            export API_URL="http://${FRONTEND_IP_TEST}:3000"
             mkdir -p url-file
             touch url-file/echo-output
             echo "API_URL=$API_URL"
@@ -107,8 +112,10 @@ jobs:
     executor: my-executor
     steps:
       - run:
-          name: Install tar utility
+          name: Install ansible and tar utility
           command: |
+            yum update -y
+            amazon-linux-extras install ansible2 -y
             yum install -y tar gzip
       - attach_workspace:
           at: ~/
