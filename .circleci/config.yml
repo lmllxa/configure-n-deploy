@@ -26,7 +26,6 @@ jobs:
             echo $API_URL > ~/echo-output
             cat ~/echo-output
             ls -al
-            #echo $FRONTEND_IP >> ~/project/inventory
       - persist_to_workspace:
           # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
           # taken to be the root directory of the workspace.
@@ -81,6 +80,7 @@ jobs:
             cat inventory
             export API_URL="http://${FRONTEND_IP}:3000"
             mkdir -p url-file
+            touch url-file/echo-output
             echo $API_URL >> url-file/echo-output
             echo url-file/echo-output
       - persist_to_workspace:
@@ -140,8 +140,9 @@ jobs:
           command: |
             apk --no-cache add curl
             cat inventory
+            cat url-file/echo-output
             API_URL=`cat url-file/echo-output`
-            echo API_URL
+            echo $API_URL
             # Test if website works
             fn() {
               if curl -s --head ${API_URL} 
